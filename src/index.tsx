@@ -1,17 +1,62 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { render } from 'react-dom';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+const customer = {
+    months: {
+        january: {
+            spent: 218,
+            reward: 0
+        },
+        february: {
+            spent: 112,
+            reward: 0
+        },
+        march: {
+            spent: 73,
+            reward: 0
+        }
+    }
+}
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+let rewards = [] as any;
+
+Object.keys(customer).forEach(key => {
+    let formula = (spent:number) => {
+        let reward = 0;
+        if(spent >= 50) {
+            reward += 90;
+        }
+        if(spent >= 100) {
+            let difference = spent - 100;
+            reward = difference * 2;
+        }
+        rewards.push(reward);
+    }
+    
+    formula(customer.months.january.spent);
+    formula(customer.months.february.spent);
+    formula(customer.months.march.spent);
+
+    customer.months.january.reward = rewards[0];
+    customer.months.february.reward = rewards[1];
+    customer.months.march.reward = rewards[2];
+
+});
+
+let element = (
+    <div>
+        <h1>React Test for Sam</h1>
+        <h3>Hi Sam</h3>
+        <h4>Our Customers 3 month Spending</h4>
+        <ul>
+            <li>January Spent: ${customer.months.january.spent} Reward: {customer.months.january.reward} points.</li>
+            <li>February Spent: ${customer.months.february.spent} Reward: {customer.months.february.reward} points.</li>
+            <li>March Spent: ${customer.months.march.spent} Reward: {customer.months.march.reward} points.</li>
+        </ul>
+    </div>
+)
+
+render(
+    element,
+    document.getElementById('root')
+)
